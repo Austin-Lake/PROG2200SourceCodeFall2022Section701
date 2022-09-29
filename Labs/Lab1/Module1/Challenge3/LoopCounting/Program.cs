@@ -1,40 +1,34 @@
-﻿using System.Reflection.Metadata.Ecma335;
-
-namespace LoopCounting
+﻿namespace LoopCounting
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            int number = 1;
-            int targetNumber = 10;
-            int iteration = 0;
-            int maxIteration = 5;
-            
+            int number;
+            int targetNumber;
+            int iteration;
+            int iterationCount = 5;
 
-            while (iteration < maxIteration) 
+            for (iteration = 0; iteration < iterationCount; iteration++) 
             {
-                Console.WriteLine(number);
-
-                if (number < targetNumber)
-                {
-                    number++;
-                    continue;
-                }
-                else if (number > targetNumber)
-                {
-                    number--;
-                    continue;
-                }
-                else
-                {
-                    targetNumber = 1;
-                    continue;
-                }
-
+                number = 1;
                 targetNumber = 10;
-                iteration++;
+
+                while (number != 0 || targetNumber != 1) 
+                {
+                    Console.WriteLine(number);
+
+                    if (number < targetNumber)
+                        number++;
+                    else
+                    {
+                        number--;
+                        targetNumber = 1;
+
+                    } 
+                }
             }
+            
         }
     }
 }
