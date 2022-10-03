@@ -7,23 +7,49 @@
             Console.WriteLine("What is your name?");
             var name = Console.ReadLine();
 
+            while (name == "") 
+            { 
+                name = TryAgain();
+            }
+
             Console.WriteLine("What is your age?");
             var age = Console.ReadLine();
+
+            while (age == "")
+            {
+                age = TryAgain();
+            }
 
             Console.WriteLine("What day were you born on?");
             var day = Console.ReadLine();
 
+            while (day == "")
+            {
+                day = TryAgain();
+            }
+
             Console.WriteLine("What month were you born in?");
             var month = Console.ReadLine();
 
+            while (month == "")
+            {
+                month = TryAgain();
+            }
+
             Console.WriteLine("What year were you born in?");
             var year = Console.ReadLine();
+
+            while (year == "")
+            {
+                year = TryAgain();
+            }
 
             Console.WriteLine("Your name is: {0}", name);
             Console.WriteLine("Your age is: {0}", age);
             Console.WriteLine("You were born on {0} {1}, {2}", month, day, year);
 
-            switch (month.ToLower())
+
+            switch (month.ToLower()) 
             {
                 case "march":
                     Console.WriteLine("You are an Aries!");
@@ -77,6 +103,12 @@
                     Console.WriteLine("Month doesn't exist...");
                     break;
             }
+        }
+
+        static string TryAgain() 
+        {
+            Console.WriteLine("You didn't write anything, please try again: ");
+            return Console.ReadLine();
         }
     }
 }
