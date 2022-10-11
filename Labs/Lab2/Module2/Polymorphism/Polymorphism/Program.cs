@@ -37,15 +37,15 @@ namespace Polymorphism
         {
            
             const int hours = 55, wage = 70;
-            List<IWorker> employees = Utils.GetEmployees();
+            //List<IWorker> employees = Utils.GetEmployees();
             
-            /*
+            
             var mock = new Mock<Utils>();
             mock.Setup(m => m.GetMockEmployees()).Returns(() =>
-            new List<IWorker> {  });
+            new List<IWorker> { new Contractor(), new Employee() });
 
-            List<Employee> employees = mock.Object.GetMockEmployees();
-            */
+            List<IWorker> employees = mock.Object.GetMockEmployees();
+            
 
             foreach (var e in employees)
             {
@@ -56,19 +56,19 @@ namespace Polymorphism
     }
 
     public class Utils {
-        public static List<IWorker> GetEmployees()
-        {
-            IWorker someEmployee = new Employee();
-            IWorker someContractor = new Contractor();
-            var everyone = new List<IWorker> { someEmployee, someContractor };
-            return everyone;
-        }
+        //public static List<IWorker> GetEmployees()
+        //{
+        //    //IWorker someEmployee = new Employee();
+        //    //IWorker someContractor = new Contractor();
+        //    //var everyone = new List<IWorker> { someEmployee, someContractor };
+        //    //return everyone;
+        //}
 
-        /*
-        public virtual List<Employee> GetMockEmployees()
+        
+        public virtual List<IWorker> GetMockEmployees()
         {
             throw new NotImplementedException();
         }
-        */
+        
     }
 }
