@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 
 namespace Server_Client_Library
 {
@@ -23,43 +25,56 @@ namespace Server_Client_Library
 
                 // Buffer for reading data
                 Byte[] bytes = new Byte[256];
-                String data = null;
+                byte[] data = new byte[256];
+                string serverInput = "";
+                bool insert = false;
 
                 // Enter the listening loop.
                 while (true)
                 {
-                    Console.Write("Waiting for a connection... ");
+                    Console.WriteLine("Waiting for a connection... ");
 
-                    // Perform a blocking call to accept requests.
-                    // You could also use server.AcceptSocket() here.
                     TcpClient client = server.AcceptTcpClient();
-                    Console.WriteLine("Connected!");
+                    Console.WriteLine("Client is Connected!");
 
-                    data = null;
-
-                    // Get a stream object for reading and writing
                     NetworkStream stream = client.GetStream();
 
-                    int i;
+                    int i = 0;
 
-                    // Loop to receive all the data sent by the client.
                     while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
                     {
-                        // Translate data bytes to a ASCII string.
-                        data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
-                        Console.WriteLine("Received: {0}", data);
 
-                        // Process the data sent by the client.
-                        data = data.ToUpper();
 
-                        byte[] msg = System.Text.Encoding.ASCII.GetBytes(data);
+                        Thread.Sleep(500);
 
-                        // Send back a response.
-                        stream.Write(msg, 0, msg.Length);
-                        Console.WriteLine("Sent: {0}", data);
+                        if (Console.KeyAvailable)
+                        {
+                            ConsoleKeyInfo key = Console.ReadKey(true);
+
+                            insert = key.Key == ConsoleKey.I;
+
+                            if (!insert)
+                                continue;
+                        }
+                        else
+                            continue;
+
+
+                        Console.Write("Insertion Mode >>");
+                        serverInput = Console.ReadLine();
+
+
+                        data = System.Text.Encoding.ASCII.GetBytes(serverInput);
+                        stream.Write(data, 0, data.Length);
+
+                        i = stream.Read(bytes, 0, bytes.Length);
+                        String responseData = String.Empty;
+                        responseData = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
+                        Console.WriteLine(responseData);
                     }
 
                     // Shutdown and end the connection
+  
                     client.Close();
                 }
             }
