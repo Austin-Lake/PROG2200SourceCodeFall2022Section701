@@ -16,46 +16,47 @@ namespace Server_Client_Library
             TcpListener server = null;
             try
             {
+                // Converts IP address string value into IP Address Object
                 IPAddress local = IPAddress.Parse(address);
 
-                // TcpListener server = new TcpListener(port);
+                // Creates new TCP Listener/Server on specified IP and Port
                 server = new TcpListener(local, port);
-
-
+                // Starts the server
                 server.Start();
-
-
+                // Default initialized member variables 
                 string serverInput = "";
                 bool insert = false;
                 Byte[] bytes = new Byte[256];
                 byte[] data = new byte[256];
-
+                // Infinite Loop
                 while (true)
                 {
-                    Console.WriteLine("Waiting for a connection... ");
-
+                    // Waits and establishes Client and stream connections
+                    Console.WriteLine("Waiting for any client connection: ");
                     TcpClient client = server.AcceptTcpClient();
-                    Console.WriteLine("Client is Connected!");
-
                     NetworkStream stream = client.GetStream();
-
+                    Console.WriteLine("Connection established with Client!");
+                    // Keeps reiterating while Client connection exists 
                     while (isClientConnected(client))
                     {
+                        // Checks if data is available in the stream
                         if (stream.DataAvailable)
                         {
+                            // Reads byte data from stream, converts it into string format, and writes the message to console
                             int i = stream.Read(bytes, 0, bytes.Length);
                             String responseData = String.Empty;
                             responseData = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
                             Console.WriteLine(responseData);
                         }
 
-
+                        // Waits for a second and checks if a key was pressed otherwise reiterates through loop
                         Thread.Sleep(1000);
 
                         if (Console.KeyAvailable)
                         {
+                            // Gets key pressed from console without displaying it
                             ConsoleKeyInfo key = Console.ReadKey(true);
-
+                            // Checks if a special key was pressed
                             insert = key.Key == ConsoleKey.I;
 
                             if (!insert)
@@ -64,19 +65,20 @@ namespace Server_Client_Library
                         else
                             continue;
 
-
-                        Console.Write("Insertion Mode >>");
+                        // Enters insert mode and reads user input
+                        Console.Write("Insertion Mode>>");
                         serverInput = Console.ReadLine();
 
-
+                        // Encodes server's input into byte format and writes it to the data stream
                         data = System.Text.Encoding.ASCII.GetBytes(serverInput);
                         stream.Write(data, 0, data.Length);
                     }
 
-                    // Shutdown and end the connection
-
+                    // Closes the stream and Client connections, then breaks out of the program
+                    stream.Close();
                     client.Close();
-                    Console.WriteLine("Client Disconnected");
+                    Console.WriteLine("Application has been disconnected");
+                    break;
                 }
             }
             catch (SocketException e)
@@ -87,12 +89,12 @@ namespace Server_Client_Library
             {
                 server.Stop();
             }
-
-            Console.WriteLine("\nHit enter to continue...");
-            Console.Read();
         }
+        // Custom method to check whether a current TCP Client connection currently exists
 
-        bool isClientConnected(TcpClient client) 
+        // Polls the connection to see if it exists and
+        // then checks to see if any data is being received in the stream
+        public static bool isClientConnected(TcpClient client) 
         {
             if (client.Client.Poll(0, SelectMode.SelectRead))
             {

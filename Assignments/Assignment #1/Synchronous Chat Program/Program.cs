@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Server_Client_Library;
 
 
-    namespace Synchronous_Chat_Program
+namespace Synchronous_Chat_Program
 {
     internal class Program
     {
@@ -20,11 +20,11 @@ using Server_Client_Library;
 
             if (args.Length == 0 || args[0].ToLower() == "-client")
             {
-                Client client = new Client(address, port);
+                new Client(address, port);
             }
             else if (args[0].ToLower() == "-server") 
             {
-                Server server = new Server(address, port);
+                new Server(address, port);
             }
         }
     }
